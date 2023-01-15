@@ -6,5 +6,7 @@ class NoteModel {
 
   final DateTime time;
 
-  NoteModel(this.id ,this.title, this.note, this.time);
+  bool important = false ;
+
+  NoteModel(this.id ,this.title, this.note, this.time , this.important);
 }
