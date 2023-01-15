@@ -67,7 +67,7 @@ class _ImportantNotesState extends State<ImportantNotes> {
                     Provider.of<NotesProvider>(context, listen: false)
                         .deleteNote(snapNotes.importantNotes[index].id);
                   },
-                  child: NoteCard(
+                  child: !snapNotes.importantNotes[index].important ? const SizedBox() : NoteCard(
                       snapNotes.importantNotes[index].id,
                       snapNotes.importantNotes[index].title,
                       snapNotes.importantNotes[index].note,
