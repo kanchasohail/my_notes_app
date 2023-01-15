@@ -37,26 +37,19 @@ class NotesProvider extends ChangeNotifier {
   }
 
   Future<void> fetchAndSetImportantNotes() async {
-    // final notesList = await getData('notes');
+    final notesList = await getData('notes');
 
-    final db = await dataBase();
-    final notesList =  db.rawQuery('SELECT * FROM notes WHERE important = ? ' , ['true']) ;
+    // final db = await dataBase();
+    // final notesList =  db.rawQuery('SELECT * FROM notes WHERE important = ? ' , ['true']) ;
 
-    // _importantNotes = notesList.map((note) {
-    //   bool important = false;
-    //   if (note['important'] == 'true') {
-    //     important = true;
-    //   }
-    //   return NoteModel(note['id'], note['title'], note['note'],
-    //       DateTime.parse(note['date_time']), important);
-    // }).toList();
-
-    // _importantNotes = notesList.forEach((element) {
-    //   return NoteModel(id, title, note, time, important)
-    // });
-
-    // _importantNotes.add(notesList.where((element) => element['important'] == 'true') as NoteModel) ;
-
+    _importantNotes = notesList.map((note) {
+      bool important = false;
+      if (note['important'] == 'true') {
+        important = true;
+      }
+      return NoteModel(note['id'], note['title'], note['note'],
+          DateTime.parse(note['date_time']), important);
+    }).toList();
   }
 
   NoteModel fetchAndShowNote(String id) {
