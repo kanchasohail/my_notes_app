@@ -129,7 +129,8 @@ class MyHomePage extends StatelessWidget {
                                 snapNotes.notes[index].id,
                                 snapNotes.notes[index].title,
                                 snapNotes.notes[index].note,
-                                snapNotes.notes[index].time),
+                                snapNotes.notes[index].time,
+                                snapNotes.notes[index].important),
                           );
                         }),
               ),
