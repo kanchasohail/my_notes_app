@@ -6,5 +6,5 @@ class NoteModel {
 
   final DateTime time;
 
-  NoteModel(this.id ,this.title, this.note, this.time );
+  NoteModel(this.id ,this.title, this.note, this.time);
 }
