@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_notes/providers/notes_provider.dart';
 
 import 'package:my_notes/screens/note_detail_screen.dart';
+import 'package:provider/provider.dart';
 
 import 'components/custom_card_shape_painter.dart';
 
-class NoteCard extends StatelessWidget {
-  const NoteCard(this.id, this.title, this.notePrev, this._dateTime, {super.key});
+class NoteCard extends StatefulWidget {
+  NoteCard(this.id, this.title, this.notePrev, this._dateTime, this.important,
+      {super.key});
 
   final String id;
 
@@ -14,8 +17,15 @@ class NoteCard extends StatelessWidget {
 
   final String notePrev;
 
-  final DateTime _dateTime ;
+  final DateTime _dateTime;
 
+  bool important;
+
+  @override
+  State<NoteCard> createState() => _NoteCardState();
+}
+
+class _NoteCardState extends State<NoteCard> {
   final double _borderRadius = 24;
 
   @override
@@ -25,7 +35,7 @@ class NoteCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
           onTap: () => Navigator.of(context)
-              .pushNamed(NoteDetailScreen.routeName, arguments: id),
+              .pushNamed(NoteDetailScreen.routeName, arguments: widget.id),
           child: Stack(
             children: [
               Container(
@@ -71,14 +81,14 @@ class NoteCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            title,
+                            widget.title,
                             maxLines: 1,
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontSize: 25, fontWeight: FontWeight.w600),
                           ),
-                          Text(notePrev,
+                          Text(widget.notePrev,
                               maxLines: 3,
                               softWrap: true,
                               overflow: TextOverflow.ellipsis,
@@ -96,21 +106,51 @@ class NoteCard extends StatelessWidget {
                               height: 20,
                             ),
                             IconButton(
-                              onPressed: () => print('Star pressed ********'),
-                              icon: const Icon(
-                                Icons.star,
+                              onPressed: () {
+                                setState(() {
+                                  widget.important = !widget.important;
+                                });
+                                Provider.of<NotesProvider>(context,
+                                        listen: false)
+                                    .shuffleImportant(
+                                        widget.id, widget.important);
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  duration: const Duration(seconds: 2),
+                                  content: Text(widget.important
+                                      ? 'Marked as Important'
+                                      : 'Removed from Important'),
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
+                                ));
+                              },
+                              icon: Icon(
+                                widget.important
+                                    ? Icons.star
+                                    : Icons.star_border_outlined,
                                 size: 40,
+                                color: widget.important
+                                    ? Colors.yellowAccent
+                                    : Colors.black54,
                               ),
                             ),
                             const SizedBox(
                               height: 10,
                             ),
-                            Text(DateFormat('dd/MM/yy').format(_dateTime) , style: const TextStyle(
-                              fontStyle: FontStyle.italic , fontWeight: FontWeight.w500
-                            ),),
-                            Text(DateFormat('hh:mm a').format(_dateTime) , style: TextStyle(
-                              fontWeight: FontWeight.bold , color: Colors.blueGrey.shade800
-                            ),),
+                            Text(
+                              DateFormat('dd/MM/yy').format(widget._dateTime),
+                              style: const TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              DateFormat('hh:mm a').format(widget._dateTime),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueGrey.shade800),
+                            ),
                           ],
                         ))
                   ],
