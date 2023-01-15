@@ -28,6 +28,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => NotesProvider()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
